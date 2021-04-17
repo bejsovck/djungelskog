@@ -1,0 +1,49 @@
+<html>
+  <head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="demo.css">
+  </head>
+ 
+<body>
+  
+      <form>
+        <label><b>Enter an E-code:</b></label>
+        <input type="text" name="message" id="user_input">
+      </form>
+      <input type="submit" onclick="showInput()"><br />
+      <label><b>What does it mean?</b></label>
+      <p>
+      <span id='display1'></span>
+      </p>
+      
+    </body>
+  
+<script>
+function showInput() {
+  var e_code = document.getElementById("user_input").value;
+  document.getElementById('display1').innerHTML = e_code;
+
+  let request = new XMLHttpRequest();
+  request.open("GET", "https://sheet.best/api/sheets/46801528-7ad5-4396-a887-b44ea7141125?");
+  request.send();
+  request.onload = () => {
+    console.log(request);
+    if (request.status == 200) {
+      let data = JSON.parse(request.response);
+      console.log(data);
+
+      for (let j = 0; j < data.length; j++) {
+        const listItem = document.createElement('li');
+        
+        listItem.textContent = data[j];
+        console.log(data[j]);
+        if (e_code == data[j]["E-Code"]) {
+          document.getElementById('display1').innerHTML = "Ingredient: " + data[j]["Ingridient"] + "<br>" + "Usage: " + data[j]["Usage"];        
+        }
+      }
+    }
+  }
+}
+  </script>
+
+</html>
